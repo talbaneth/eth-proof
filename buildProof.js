@@ -162,7 +162,6 @@ BuildProof.prototype.getTransactionProof = function(txHash){
               if(error != null){ cb2(error, null); }else{ cb2(null, true) }
             })
           }, function(e,r){
-            console.log("transaction.transactionIndex " + transaction.transactionIndex);
             txTrie.findPath(rlp.encode(transaction.transactionIndex), function(e,rawTxNode,remainder,stack){
               var prf = {
                 blockHash: Buffer.from(transaction.blockHash.slice(2),'hex'),
@@ -283,10 +282,6 @@ var getRawHeader = (_block) => {
 var squanchTx = (tx) => {
   tx.gasPrice = '0x' + tx.gasPrice.toString(16)
   tx.value = '0x' + tx.value.toString(16)
-  let txFromStr = JSON.stringify(tx.from).toLowerCase();
-  tx.from = JSON.parse(txFromStr);
-  let txToStr = JSON.stringify(tx.from).toLowerCase();
-  tx.to = JSON.parse(txToStr);
   return tx;
 }
 var strToBuf = (input)=>{ 
