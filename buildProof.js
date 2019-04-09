@@ -7,8 +7,8 @@ const EthereumBlock = require('ethereumjs-block/from-rpc')
 const levelup = require('levelup');
 const sha3 = require('js-sha3').keccak_256
 
-var BuildProof = function(web3ProviderURL, blockHash, dbPath /*optional*/){
-  this.web3 = new Web3(new Web3.providers.HttpProvider(web3ProviderURL))
+var BuildProof = function(web3Provider, blockHash, dbPath /*optional*/){
+  this.web3 = new Web3(web3Provider)
   if(blockHash != undefined){
     this.blockHash = blockHash
     if(dbPath != undefined){
