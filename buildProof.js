@@ -164,6 +164,7 @@ BuildProof.prototype.getTransactionProof = function(txHash){
             txTrie.findPath(rlp.encode(transaction.transactionIndex), function(e,rawTxNode,remainder,stack){
               var prf = {
                 blockHash: Buffer.from(transaction.blockHash.slice(2),'hex'),
+                blockNumber: block.number,
                 header:    getRawHeader(block),
                 parentNodes:     rawStack(stack),
                 path:      rlp.encode(transaction.transactionIndex),
