@@ -149,7 +149,6 @@ BuildProof.prototype.getTransactionProof = function(txHash){
   return new Promise((accept, reject) => {
     try{
       self.web3.eth.getTransaction(txHash, function(e,transaction){
-        console.log("transaction " + JSON.stringify(transaction));
         if(e || !transaction){ return reject(e || "transaction not found")}
         self.web3.eth.getBlock(transaction.blockHash, true, function(e,block){
           if(e || !block){ return reject(e || "block not found")}
