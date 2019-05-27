@@ -190,19 +190,19 @@ BuildProof.prototype.getReceiptProof = function(txHash){
         var receiptsTrie = new Trie();
         async.map(block.transactions,function(siblingTxHash, cb2){
           self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
-            if(e || !siblingReceipt){
+            if(!e && !siblingReceipt){
               putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
             }
             else{
-              MilliSleep(10);
+              await sleep(10);
               self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
-                if(e || !siblingReceipt){
+                if(!e && siblingReceipt){
                   putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
                 }
                 else{
-                  MilliSleep(100);
+                  await sleep(100);
                   self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
-                    if(e || !siblingReceipt){
+                    if(!e && siblingReceipt){
                       putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
                     }
                   });
