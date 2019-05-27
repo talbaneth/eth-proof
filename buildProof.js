@@ -180,7 +180,7 @@ BuildProof.prototype.getTransactionProof = function(txHash){
 }
 
 
-BuildProof.prototype.getReceiptProof = async function(txHash){
+BuildProof.prototype.getReceiptProof = function(txHash){
   self = this;
   return new Promise ((accept, reject) => {
     self.web3.eth.getTransactionReceipt(txHash, function(e,receipt){
@@ -194,13 +194,11 @@ BuildProof.prototype.getReceiptProof = async function(txHash){
               putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
             }
             else{
-              await sleep(10);
               self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
                 if(!e && siblingReceipt){
                   putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
                 }
                 else{
-                  await sleep(100);
                   self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
                     if(!e && siblingReceipt){
                       putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
