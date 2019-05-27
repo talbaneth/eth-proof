@@ -190,7 +190,25 @@ BuildProof.prototype.getReceiptProof = function(txHash){
         var receiptsTrie = new Trie();
         async.map(block.transactions,function(siblingTxHash, cb2){
           self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
-            putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
+            if(e || !siblingReceipt){
+              putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
+            }
+            else{
+              MilliSleep(10);
+              self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
+                if(e || !siblingReceipt){
+                  putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
+                }
+                else{
+                  MilliSleep(100);
+                  self.web3.eth.getTransactionReceipt(siblingTxHash, function(e,siblingReceipt){
+                    if(e || !siblingReceipt){
+                      putReceipt(siblingReceipt, receiptsTrie, block.number, cb2)
+                    }
+                  });
+                }
+              });
+            }
           })
         }, function(e,r){
           receiptsTrie.findPath(rlp.encode(receipt.transactionIndex), function(e,rawReceiptNode,remainder,stack){
