@@ -180,7 +180,7 @@ BuildProof.prototype.getTransactionProof = function(txHash){
 }
 
 
-BuildProof.prototype.getReceiptProof = function(txHash){
+BuildProof.prototype.getReceiptProof = async function(txHash){
   self = this;
   return new Promise ((accept, reject) => {
     self.web3.eth.getTransactionReceipt(txHash, function(e,receipt){
