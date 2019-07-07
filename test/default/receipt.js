@@ -3,7 +3,25 @@ var EP   = require('./../../index')
 var eP   = new EP(new Web3.providers.HttpProvider("https://mainnet.infura.io"))
 
 
-describe('getReceiptProof', function () {
+describe('getReceiptProof', function () {  
+  it.only('recent kyber receipt with 7 logs', function (done) {
+    // // reciepts w no logs and only 1 tx in its block. these work!
+    eP.getReceiptProof('0x686545d1eab8ef0f3035cb1b26f213512dd22c091f8fbc9984becaae465d136e').then((result)=>{
+      // console.log("RESULT", result)
+      EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
+      done()
+    }).catch((e)=>{console.log(e)})
+  });
+
+  it('recent kyber reciept used for testing', function (done) {
+    // // reciepts w no logs and only 1 tx in its block. these work!
+    eP.getReceiptProof('0x2664d0c9dced91f321323697aa645cb82d7254439480a96ddcdc7ecae35c47a5').then((result)=>{
+      // console.log("RESULT", result)
+      EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
+      done()
+    }).catch((e)=>{console.log(e)})
+  });
+
   it('should be able to request a proof from web3 and verify it', function (done) {
     // // reciepts w no logs and only 1 tx in its block. these work!
     eP.getReceiptProof('0xc55e2b90168af6972193c1f86fa4d7d7b31a29c156665d15b9cd48618b5177ef').then((result)=>{
@@ -55,7 +73,7 @@ describe('getReceiptProof', function () {
     }).catch((e)=>{console.log(e)})
   });
     // 4 tx, 2 have logs
-  it('should be able to request a proof from web3 and verify it', function (done) {
+  it('tal new test case - should be able to request a proof from web3 and verify it', function (done) {
     eP.getReceiptProof('0x8d0da05c3256da94a4213149de3e17fae7d1fd1b86fd4e57557527325ba87adc').then((result)=>{
       EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
       done()

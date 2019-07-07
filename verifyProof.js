@@ -129,7 +129,18 @@ VerifyProof._valueInTrieIndex = (trieIndex, path, value, parentNodes, header, bl
 // proves commitment to its root only (not a blockHash). I should almost make this 
 // private although its very fundamental so i wont. 
 VerifyProof.trieValue = (path, value, parentNodes, root) => {
-  try{
+    console.log("value: ",value)
+    console.log("value rlp encoded: ",Buffer.from(rlp.encode(value),'hex').toString('hex').match(/../g).join(' '))
+
+    console.log("rlp encoded parent nodes:")
+    var i;
+    for (i = 0; i < parentNodes.length; i++) { 
+      console.log(i, ":", Buffer.from(rlp.encode(parentNodes[i]),'hex').toString('hex').match(/../g).join(' '));
+    } 
+    
+    console.log("root:", root)
+    console.log("parentNodes: ",parentNodes)
+    try{
     var currentNode;
       var len = parentNodes.length;
       console.log("len " + len);
@@ -155,6 +166,7 @@ console.log("false2");
 console.log("currentNode.length " + currentNode.length);
       switch(currentNode.length){
         case 17://branch node
+          console.log("*** branch node ***")
           if(pathPtr == path.length){
             if(currentNode[16] == rlp.encode(value)){
                 console.log("17 equals ret true");
@@ -177,6 +189,7 @@ console.log("nibbles " + nibblesint);
           pathPtr += nibblesint
             console.log("pathPtr " + pathPtr + " path.length " + path.length);
           if(pathPtr == path.length){//leaf node
+            console.log("*** leaf node ***")
             if(currentNode[1].equals(rlp.encode(value))){
                 console.log("2 equals ret true");
               return true
@@ -186,6 +199,7 @@ console.log("nibbles " + nibblesint);
               return false
             }
           }else{//extension node
+            console.log("*** extension node ***")
             console.log("extension node");
             nodeKey = currentNode[1]
           }
