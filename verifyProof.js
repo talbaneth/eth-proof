@@ -126,12 +126,37 @@ VerifyProof._valueInTrieIndex = (trieIndex, path, value, parentNodes, header, bl
   return false;
 }
 
+const util = require('util')
+
 // proves commitment to its root only (not a blockHash). I should almost make this 
 // private although its very fundamental so i wont. 
 VerifyProof.trieValue = (path, value, parentNodes, root) => {
-    console.log("value: ",value)
-    console.log("value rlp encoded: ",Buffer.from(rlp.encode(value),'hex').toString('hex').match(/../g).join(' '))
+    //console.log("value: ", util.inspect(value, true, null, true /* enable colors */))
+    //console.log(util.inspect(value, {showHidden: false, depth: null, maxArrayLength: null}))
+    //console.log("value as json:", JSON.stringify(value, null, null))
 
+    //console.log("value: ",value)
+    //console.log("value[3]: ",value[3])
+
+    ///////// create json from waterloo input ////////////////////////
+    const fs = require("fs")
+    var outputObject = {};
+    outputObject["value_rlp"] = Buffer.from(rlp.encode(value),'hex').toString('hex').match(/../g).join(' ')
+    outputObject["parent_nodes_rlp"] = []
+    for (i = 0; i < parentNodes.length; i++) { 
+        outputObject["parent_nodes_rlp"].push(Buffer.from(rlp.encode(parentNodes[i]),'hex').toString('hex').match(/../g).join(' '))
+    }
+    outputObject["path"] = path.toString('hex')
+    fs.writeFile("./verifyproof_output.json", JSON.stringify(outputObject), (err) => {
+        if (err) {
+            console.error(err);
+            return;
+        };
+        console.log("File has been created");
+    });
+    ///////////////////////////////
+
+    console.log("value rlp encoded: ",Buffer.from(rlp.encode(value),'hex').toString('hex').match(/../g).join(' '))
     console.log("rlp encoded parent nodes:")
     var i;
     for (i = 0; i < parentNodes.length; i++) { 
@@ -152,6 +177,8 @@ VerifyProof.trieValue = (path, value, parentNodes, root) => {
       console.log("path " + path);
     for (var i = 0 ; i < len ; i++) {
         currentNode = parentNodes[i];
+        console.log("nodeKey", nodeKey)
+        console.log("Buffer.from(sha3(rlp.encode(currentNode)),'hex')", Buffer.from(sha3(rlp.encode(currentNode)),'hex'))
       if(!nodeKey.equals( Buffer.from(sha3(rlp.encode(currentNode)),'hex'))){
 
      console.log("false1");

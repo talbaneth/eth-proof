@@ -4,8 +4,24 @@ var eP   = new EP(new Web3.providers.HttpProvider("https://mainnet.infura.io"))
 
 
 describe('getReceiptProof', function () {  
-  it.only('recent kyber receipt with 7 logs', function (done) {
-    // // reciepts w no logs and only 1 tx in its block. these work!
+
+  it.only('locking knc in a contract', function (done) {
+    eP.getReceiptProof('0x47d76b0a9290ad65db9e33301e9f68c45c005942ebb4c7f91503424cc599fcbf').then((result)=>{
+      // console.log("RESULT", result)
+      EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
+      done()
+    }).catch((e)=>{console.log(e)})
+  });  
+    
+  it('simple knc transfer', function (done) {
+    eP.getReceiptProof('0xfba9f0e819806004b0a171e4e55acf3d919e6e4fb9f6bd34f001062e94bde123').then((result)=>{
+      // console.log("RESULT", result)
+      EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
+      done()
+    }).catch((e)=>{console.log(e)})
+  });
+    
+  it('recent kyber receipt with 7 logs', function (done) {
     eP.getReceiptProof('0x686545d1eab8ef0f3035cb1b26f213512dd22c091f8fbc9984becaae465d136e').then((result)=>{
       // console.log("RESULT", result)
       EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
@@ -14,7 +30,6 @@ describe('getReceiptProof', function () {
   });
 
   it('recent kyber reciept used for testing', function (done) {
-    // // reciepts w no logs and only 1 tx in its block. these work!
     eP.getReceiptProof('0x2664d0c9dced91f321323697aa645cb82d7254439480a96ddcdc7ecae35c47a5').then((result)=>{
       // console.log("RESULT", result)
       EP.receipt(result.path, result.value, result.parentNodes, result.header, result.blockHash).should.be.true()
